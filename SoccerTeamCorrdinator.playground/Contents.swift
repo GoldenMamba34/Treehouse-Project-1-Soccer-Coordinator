@@ -5,7 +5,7 @@ var players = [
     ,["name" : "Jill Tanner", "age":36,"experience":true, "guardians": "Clara Tanner"]
     , ["name":"Bill Bon","age": 36, "experience": true, "guardians": "Sara and Jenny Bon"]
     , ["name": "Eva Gordan", "age": 35, "experience": false, "guardians": "Wendy and Mike Gordan"]
-    , ["name": "Mat Gill", "age": 40, "experience": false, "guardian": "Charles and Sylvia Gill"]
+    , ["name": "Mat Gill", "age": 40, "experience": false, "guardians": "Charles and Sylvia Gill"]
     , ["name": "Kimmy Stein", "age": 41, "experience": false, "guardians": "Bill Hillary Stein"]
     ,["name": "Sammt Adams", "age": 45, "experience": false, "guardians": "Jeff Adams"]
     , ["name": "Karl Saygan", "age": 42, "experience": true,"guardians": "Heather Bledsoe"]
@@ -34,9 +34,9 @@ func sortPlayers() {
     for player in players {
         
         if player["experience"] as? Bool == true {
-players[index]["team"] = lastTeamExperiencedPlayerAddedTo
+            players[index]["team"] = lastTeamExperiencedPlayerAddedTo
             print(player)
- teams[lastTeamUnexperiencedPlayerAddedTo].append(player)
+            teams[lastTeamUnexperiencedPlayerAddedTo].append(player)
             lastTeamExperiencedPlayerAddedTo += 1
             if lastTeamExperiencedPlayerAddedTo == 3 {
                 lastTeamExperiencedPlayerAddedTo = 0
@@ -44,7 +44,7 @@ players[index]["team"] = lastTeamExperiencedPlayerAddedTo
         }
             
         else {
-players[index]["team"] = lastTeamUnexperiencedPlayerAddedTo
+            players[index]["team"] = lastTeamUnexperiencedPlayerAddedTo
             teams[lastTeamUnexperiencedPlayerAddedTo].append(player)
             
             lastTeamUnexperiencedPlayerAddedTo += 1
@@ -53,8 +53,8 @@ players[index]["team"] = lastTeamUnexperiencedPlayerAddedTo
                 lastTeamUnexperiencedPlayerAddedTo = 0
             }
         }
-   
-       index += 1
+        
+        index += 1
     }
     teamSharks = teams[0]
     teamDragons = teams[1]
@@ -77,8 +77,8 @@ func createLetters() {
     for player in players {
         
         letters.append("""
-            Dear \(player["guardians"]),
-            Your child \(player["name"]) has been placed on team \(player["guardians"]), practices start \(getPlayerPracticeTime(playerTeam: player["team"] as! Int))
+            Dear \(player["guardians"]!),
+            Your child \(player["name"]!) has been placed on team \(player["guardians"]!), practices start \(getPlayerPracticeTime(playerTeam: player["team"] as! Int))
             
             """
         )
@@ -88,4 +88,5 @@ func createLetters() {
 sortPlayers()
 createLetters()
 print(letters)
+
 
