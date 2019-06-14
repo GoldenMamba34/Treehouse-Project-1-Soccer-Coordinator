@@ -20,66 +20,89 @@ var players = [
     , ["name": "Les Clay", "age": 42, "experience": true, "guardians": "Wynonna Brown"]
     , ["name": "Herschel Krustofski","age": 45, "experience": true, "guardians": "Hyman and Rachel Krustofski"]
 ]
+// An array that holds the data for each player
 
-var teams = [[], [], []]
+var teams = [[], [], []] // array holding the 3 teams
+
+
 var teamSharks =  [Any]()
 var teamDragons = [Any]()
 var teamRaptors = [Any]()
-var letters = [String]()
-var index = 0
-func sortPlayers() {
-    
-    var lastTeamExperiencedPlayerAddedTo = 0
-    var lastTeamUnexperiencedPlayerAddedTo = 0
-    for player in players {
-        
-        if player["experience"] as? Bool == true {
-            players[index]["team"] = lastTeamExperiencedPlayerAddedTo
-            print(player)
-            teams[lastTeamUnexperiencedPlayerAddedTo].append(player)
-            lastTeamExperiencedPlayerAddedTo += 1
-            if lastTeamExperiencedPlayerAddedTo == 3 {
-                lastTeamExperiencedPlayerAddedTo = 0
-            }
-        }
-            
-        else {
-            players[index]["team"] = lastTeamUnexperiencedPlayerAddedTo
-            teams[lastTeamUnexperiencedPlayerAddedTo].append(player)
-            
-            lastTeamUnexperiencedPlayerAddedTo += 1
-            
-            if lastTeamUnexperiencedPlayerAddedTo == 3 {
-                lastTeamUnexperiencedPlayerAddedTo = 0
-            }
-        }
-        
-        index += 1
+
+// Arrays for each of the 3 teams
+
+var letters = [String]() // variable storing all of the letters
+
+
+func getPlayerTeamFromNumber(teamNumber: Int) -> String { // Gets the name of the team the player is on by taking in the index that team is in the "teams" variable
+    var playersTeam = ""
+    switch teamNumber {
+    case 0: playersTeam = "Sharks"
+    case 1: playersTeam = "Dragons"
+    default: playersTeam = "Raptors"
     }
+    return playersTeam
+}
+func sortPlayers() { // Sorts all of the players into their respective teams
+    var experiencedPlayers = [[String: Any]]() // Array storing all of the experienced players
+    var unexperiencedPlayers = [[String: Any]]() // Array storing all of the unexperienced players
+    for i in 0...players.count - 1 { // Assigns players to either the experiencedPlayers array for experienced players or the unexperiencedPlayers array for unexperienced players
+        
+        if players[i]["experience"] as? Bool == true {
+            experiencedPlayers.append(players[i])
+        }
+        else {
+            unexperiencedPlayers.append(players[i])
+        }
+    }
+    var index = 0
+    for experiencedPlayer in experiencedPlayers  { // Assigns experienced players to their respective teams
+        var copyOfExperiencedPlayersArray = experiencedPlayers
+        copyOfExperiencedPlayersArray[index]["team"] = getPlayerTeamFromNumber(teamNumber: index % 3)
+        teams[index % 3].append(copyOfExperiencedPlayersArray[index])
+        copyOfExperiencedPlayersArray.remove(at: index)
+        index += 1
+        if index > experiencedPlayers.count - 1 {
+            experiencedPlayers = copyOfExperiencedPlayersArray
+        }
+    }
+    index = 0
+    for unexperiencedPlayer in unexperiencedPlayers  { // Assigns unexperienced players to their respective teams
+        var copyOfUnexperiencedPlayersArray = unexperiencedPlayers
+        copyOfUnexperiencedPlayersArray[index]["team"] = getPlayerTeamFromNumber(teamNumber: index % 3)
+
+        teams[index % 3].append(copyOfUnexperiencedPlayersArray[index])
+        copyOfUnexperiencedPlayersArray.remove(at: index)
+        index += 1
+        if index > unexperiencedPlayers.count - 1 {
+            unexperiencedPlayers = copyOfUnexperiencedPlayersArray
+        }
+    }
+    
     teamSharks = teams[0]
     teamDragons = teams[1]
     teamRaptors = teams[2]
+    // Assigns each team array it's players
 }
 
 func createLetters() {
     
-    func getPlayerPracticeTime(playerTeam: Int) -> String {
+    func getPlayerPracticeTime(playerTeam: String) -> String {// Takes in a player's team as String and returns that team's first practice time in the form of a String
         var practiceTime = ""
         switch playerTeam {
-        case 0: practiceTime = "March 17th, 1pm"
-        case 1: practiceTime = "March 17th, 3pm"
-        case 2: practiceTime = "March 18th, 1pm"
+        case "Sharks": practiceTime = "March 17th, 1pm"
+        case "Dragons": practiceTime = "March 17th, 3pm"
+        case "Raptors": practiceTime = "March 18th, 1pm"
         default: break
         }
         return practiceTime
     }
-    
-    for player in players {
+
+    for player in teamSharks + teamDragons + teamRaptors as! [[String: Any]] { // Creates the letters
         
         letters.append("""
-            Dear \(player["guardians"]!),
-            Your child \(player["name"]!) has been placed on team \(player["guardians"]!), practices start \(getPlayerPracticeTime(playerTeam: player["team"] as! Int))
-            
+               Dear \(player["guardians"]!),
+                Your child \(player["name"]!) has been placed on team \(player["team"]!), practices start \(getPlayerPracticeTime(playerTeam: player["team"] as! String))
             """
         )
     }
@@ -87,6 +110,6 @@ func createLetters() {
 }
 sortPlayers()
 createLetters()
-print(letters)
 
+print(letters) // Prints the letters
 
