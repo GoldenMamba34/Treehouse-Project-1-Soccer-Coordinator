@@ -58,8 +58,10 @@ func sortPlayers() { // Sorts all of the players into their respective teams
     var index = 0
     for experiencedPlayer in experiencedPlayers  { // Assigns experienced players to their respective teams
         var copyOfExperiencedPlayersArray = experiencedPlayers
-        copyOfExperiencedPlayersArray[index]["team"] = getPlayerTeamFromNumber(teamNumber: index % 3)
-        teams[index % 3].append(copyOfExperiencedPlayersArray[index])
+        
+        copyOfExperiencedPlayersArray[index]["team"] = getPlayerTeamFromNumber(teamNumber: index % teams.count)
+        teams[index % teams.count].append(copyOfExperiencedPlayersArray[index])
+        
         copyOfExperiencedPlayersArray.remove(at: index)
         index += 1
         if index > experiencedPlayers.count - 1 {
@@ -69,9 +71,9 @@ func sortPlayers() { // Sorts all of the players into their respective teams
     index = 0
     for unexperiencedPlayer in unexperiencedPlayers  { // Assigns unexperienced players to their respective teams
         var copyOfUnexperiencedPlayersArray = unexperiencedPlayers
-        copyOfUnexperiencedPlayersArray[index]["team"] = getPlayerTeamFromNumber(teamNumber: index % 3)
+        copyOfUnexperiencedPlayersArray[index]["team"] = getPlayerTeamFromNumber(teamNumber: index % teams.count)
 
-        teams[index % 3].append(copyOfUnexperiencedPlayersArray[index])
+        teams[index % teams.count].append(copyOfUnexperiencedPlayersArray[index])
         copyOfUnexperiencedPlayersArray.remove(at: index)
         index += 1
         if index > unexperiencedPlayers.count - 1 {
@@ -111,5 +113,7 @@ func createLetters() {
 sortPlayers()
 createLetters()
 
-print(letters) // Prints the letters
+for letter in letters {
+    print(letter)
+} // Prints the letters
 
